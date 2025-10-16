@@ -1,0 +1,75 @@
+@model LoginViewModel
+
+@{
+    ViewData["Title"] = "Đăng nhập";
+}
+
+<div class="container-fluid min-vh-100 d-flex align-items-center justify-content-center bg-light">
+    <div class="row w-100 justify-content-center">
+        <div class="col-md-6 col-lg-4">
+            <div class="card shadow-lg border-0 fade-in">
+                <div class="card-header bg-primary text-white text-center py-4">
+                    <i class="fas fa-tree fa-3x mb-3"></i>
+                    <h3 class="mb-0">Cây Gia Phả</h3>
+                    <p class="mb-0">Đăng nhập vào hệ thống</p>
+                </div>
+                <div class="card-body p-4">
+                    <form asp-action="Login" method="post">
+                        <div class="form-group mb-3">
+                            <label asp-for="Username" class="form-label fw-bold">
+                                <i class="fas fa-user me-2"></i>
+                                Tên đăng nhập
+                            </label>
+                            <input asp-for="Username" class="form-control form-control-lg" placeholder="Nhập tên đăng nhập" required />
+                            <span asp-validation-for="Username" class="text-danger small"></span>
+                        </div>
+                        <div class="form-group mb-4">
+                            <label asp-for="Password" class="form-label fw-bold">
+                                <i class="fas fa-lock me-2"></i>
+                                Mật khẩu
+                            </label>
+                            <input asp-for="Password" type="password" class="form-control form-control-lg" placeholder="Nhập mật khẩu" required />
+                            <span asp-validation-for="Password" class="text-danger small"></span>
+                        </div>
+                        <div class="d-grid mb-3">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="fas fa-sign-in-alt me-2"></i>
+                                Đăng nhập
+                            </button>
+                        </div>
+                        <div class="text-center">
+                            <a asp-action="ForgotPassword" class="text-decoration-none">
+                                <i class="fas fa-key me-1"></i>
+                                Quên mật khẩu?
+                            </a>
+                        </div>
+                    </form>
+                </div>
+                @if (ViewData.ModelState.ErrorCount > 0)
+                {
+                    <div class="card-footer bg-transparent border-0">
+                        <div class="alert alert-danger border-0 shadow-sm">
+                            <i class="fas fa-exclamation-triangle me-2"></i>
+                            <strong>Đăng nhập thất bại!</strong>
+                            @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                            {
+                                <div>@error.ErrorMessage</div>
+                            }
+                        </div>
+                    </div>
+                }
+            </div>
+
+            <div class="text-center mt-4 text-muted">
+                <small>
+                    <i class="fas fa-shield-alt me-1"></i>
+                    Hệ thống quản lý cây gia phả gia đình
+                </small>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

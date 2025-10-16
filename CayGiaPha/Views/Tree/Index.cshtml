@@ -1,0 +1,252 @@
+@model IEnumerable<CayGiaPha.Models.People>
+
+@{
+    ViewData["Title"] = "Cây Gia Phả";
+}
+
+<h1>Cây Gia Phả</h1>
+
+@if (!Model.Any())
+{
+    <p>Không có dữ liệu gia phả nào. Vui lòng thêm thành viên trước.</p>
+}
+else
+{
+    <div id="tree-container" style="width: 100%; height: 800px; overflow: auto; background-color: #f8f9fa; border-radius: 8px; padding: 20px;"></div>
+}
+
+@section Scripts {
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script>
+        var data = @Html.Raw(Json.Serialize(Model.Select(p => new {
+            id = p.PersonalID,
+            name = p.Name,
+            gender = p.Gender,
+            birthday = p.Birthday?.ToString("yyyy-MM-dd"),
+            deathDate = p.DeathDate?.ToString("yyyy-MM-dd"),
+            birthPlace = p.BirthPlace,
+            generation = p.Generation,
+            photoUrl = p.PhotoUrl,
+            family = p.Family?.Name,
+            pids = p.ChildParents.Select(cp => cp.ParentID).ToArray(),
+            cids = p.ParentChildren.Select(pc => pc.ChildID).ToArray(),
+            sids = p.Marriages1.Select(m => m.Spouse2ID).Concat(p.Marriages2.Select(m => m.Spouse1ID)).Distinct().ToArray()
+        })));
+
+        console.log('Data:', data);
+
+        if (data.length > 0) {
+            try {
+                // Beautiful tree visualization using D3.js
+                const width = 1400;
+                const height = 800;
+
+                const svg = d3.select("#tree-container")
+                    .append("svg")
+                    .attr("width", width)
+                    .attr("height", height)
+                    .style("background-color", "#ffffff")
+                    .style("border-radius", "8px");
+
+                // Create a beautiful tree layout with proper spacing
+                const treeLayout = d3.tree()
+                    .size([width - 200, height - 200])
+                    .nodeSize([120, 180]); // Generous spacing for branches
+
+                // Convert data to hierarchy - find root nodes (people with no parents)
+                const rootNodes = data.filter(p => p.pids.length === 0);
+
+                if (rootNodes.length === 0) {
+                    // If no clear roots, use the first person
+                    rootNodes.push(data[0]);
+                }
+
+                const root = d3.hierarchy({
+                    name: "Gia Phả",
+                    children: rootNodes.map(p => buildTreeNode(p, data))
+                });
+
+                function buildTreeNode(person, allData) {
+                    const children = allData.filter(p => p.pids.includes(person.id));
+
+                    return {
+                        name: person.name,
+                        id: person.id,
+                        gender: person.gender,
+                        birthday: person.birthday,
+                        spouse: allData.find(p => person.sids.includes(p.id))?.name,
+                        children: children.map(c => buildTreeNode(c, allData))
+                    };
+                }
+
+                treeLayout(root);
+
+                // Draw smooth curved links with gradient
+                const linkGroup = svg.append("g")
+                    .attr("class", "links");
+
+                linkGroup.selectAll(".link")
+                    .data(root.links())
+                    .enter()
+                    .append("path")
+                    .attr("class", "link")
+                    .attr("d", d => {
+                        const sourceX = d.source.x;
+                        const sourceY = d.source.y;
+                        const targetX = d.target.x;
+                        const targetY = d.target.y;
+
+                        // Create smooth curve
+                        const midY = (sourceY + targetY) / 2;
+                        return `M ${sourceX} ${sourceY} C ${sourceX} ${midY}, ${targetX} ${midY}, ${targetX} ${targetY}`;
+                    })
+                    .attr("fill", "none")
+                    .attr("stroke", "#bdc3c7")
+                    .attr("stroke-width", 3)
+                    .attr("stroke-linecap", "round");
+
+                // Draw nodes with beautiful styling
+                const nodeGroup = svg.append("g")
+                    .attr("class", "nodes");
+
+                const nodes = nodeGroup.selectAll(".node")
+                    .data(root.descendants())
+                    .enter()
+                    .append("g")
+                    .attr("class", "node")
+                    .attr("transform", d => `translate(${d.x}, ${d.y})`);
+
+                // Node circles with beautiful gradients and shadows
+                const defs = svg.append("defs");
+
+                // Male gradient
+                const maleGradient = defs.append("radialGradient")
+                    .attr("id", "maleGradient")
+                    .attr("cx", "30%")
+                    .attr("cy", "30%");
+                maleGradient.append("stop").attr("offset", "0%").attr("stop-color", "#5dade2");
+                maleGradient.append("stop").attr("offset", "100%").attr("stop-color", "#3498db");
+
+                // Female gradient
+                const femaleGradient = defs.append("radialGradient")
+                    .attr("id", "femaleGradient")
+                    .attr("cx", "30%")
+                    .attr("cy", "30%");
+                femaleGradient.append("stop").attr("offset", "0%").attr("stop-color", "#ec7063");
+                femaleGradient.append("stop").attr("offset", "100%").attr("stop-color", "#e74c3c");
+
+                // Drop shadow filter
+                const filter = defs.append("filter")
+                    .attr("id", "dropshadow")
+                    .attr("x", "-20%")
+                    .attr("y", "-20%")
+                    .attr("width", "140%")
+                    .attr("height", "140%");
+
+                filter.append("feGaussianBlur")
+                    .attr("in", "SourceAlpha")
+                    .attr("stdDeviation", "3");
+
+                filter.append("feOffset")
+                    .attr("dx", "2")
+                    .attr("dy", "2")
+                    .attr("result", "offset");
+
+                filter.append("feFlood")
+                    .attr("flood-color", "rgba(0,0,0,0.3)")
+                    .attr("result", "flood");
+
+                filter.append("feComposite")
+                    .attr("in", "flood")
+                    .attr("in2", "offset")
+                    .attr("operator", "in")
+                    .attr("result", "shadow");
+
+                const feMerge = filter.append("feMerge");
+                feMerge.append("feMergeNode").attr("in", "shadow");
+                feMerge.append("feMergeNode").attr("in", "SourceGraphic");
+
+                nodes.append("circle")
+                    .attr("r", 35)
+                    .attr("fill", d => d.data.gender === "Nam" ? "url(#maleGradient)" : d.data.gender === "Nữ" ? "url(#femaleGradient)" : "#95a5a6")
+                    .attr("stroke", "#34495e")
+                    .attr("stroke-width", 3)
+                    .attr("filter", "url(#dropshadow)");
+
+                // Name text with better typography
+                nodes.append("text")
+                    .attr("dy", -45)
+                    .attr("text-anchor", "middle")
+                    .text(d => d.data.name)
+                    .style("font-size", "14px")
+                    .style("font-weight", "600")
+                    .style("fill", "#2c3e50")
+                    .style("font-family", "Arial, sans-serif");
+
+                // Spouse text
+                nodes.filter(d => d.data.spouse)
+                    .append("text")
+                    .attr("dy", -28)
+                    .attr("text-anchor", "middle")
+                    .text(d => d.data.gender === "Nam" ? "Vợ: " + d.data.spouse : "Chồng: " + d.data.spouse)
+                    .style("font-size", "11px")
+                    .style("fill", "#7f8c8d")
+                    .style("font-family", "Arial, sans-serif");
+
+                // Birthday text
+                nodes.append("text")
+                    .attr("dy", -10)
+                    .attr("text-anchor", "middle")
+                    .text(d => d.data.birthday ? new Date(d.data.birthday).getFullYear() : "")
+                    .style("font-size", "11px")
+                    .style("fill", "#95a5a6")
+                    .style("font-family", "Arial, sans-serif");
+
+                // Beautiful legend
+                const legend = svg.append("g")
+                    .attr("transform", "translate(50, " + (height - 80) + ")");
+
+                // Male legend
+                legend.append("circle")
+                    .attr("r", 12)
+                    .attr("fill", "url(#maleGradient)")
+                    .attr("stroke", "#34495e")
+                    .attr("stroke-width", 2)
+                    .attr("cx", 0)
+                    .attr("cy", 0);
+
+                legend.append("text")
+                    .attr("x", 20)
+                    .attr("y", 5)
+                    .text("Nam")
+                    .style("font-size", "14px")
+                    .style("fill", "#2c3e50")
+                    .style("font-weight", "500");
+
+                // Female legend
+                legend.append("circle")
+                    .attr("r", 12)
+                    .attr("fill", "url(#femaleGradient)")
+                    .attr("stroke", "#34495e")
+                    .attr("stroke-width", 2)
+                    .attr("cx", 80)
+                    .attr("cy", 0);
+
+                legend.append("text")
+                    .attr("x", 100)
+                    .attr("y", 5)
+                    .text("Nữ")
+                    .style("font-size", "14px")
+                    .style("fill", "#2c3e50")
+                    .style("font-weight", "500");
+
+                console.log('Beautiful tree rendered successfully');
+            } catch (error) {
+                console.error('Error initializing tree:', error);
+                document.getElementById('tree-container').innerHTML = '<p>Lỗi khi tải cây gia phả: ' + error.message + '</p>';
+            }
+        } else {
+            console.log('No data available for tree');
+        }
+    </script>
+}

@@ -1,0 +1,237 @@
+﻿@{
+    ViewData["Title"] = "Trang chủ";
+    var peopleList = ViewBag.People as List<CayGiaPha.Models.People> ?? new List<CayGiaPha.Models.People>();
+}
+
+<div class="fade-in">
+
+    <!-- Header -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="mb-0">
+                        <i class="fas fa-home me-2"></i>
+                        Chào mừng đến với Hệ thống Quản lý Cây Gia Phả
+                    </h2>
+                </div>
+                <div class="card-body">
+                    <p class="lead text-secondary">
+                        Hệ thống giúp bạn quản lý thông tin gia đình, quan hệ huyết thống và các sự kiện quan trọng một cách hiệu quả và dễ dàng.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Functional Cards -->
+    <div class="row">
+        @* Quản lý Thành viên *@
+        <div class="col-md-6 col-lg-3 mb-4">
+            <div class="card h-100 text-center">
+                <div class="card-body">
+                    <i class="fas fa-users fa-3x text-primary mb-3"></i>
+                    <h5 class="card-title">Quản lý Thành viên</h5>
+                    <p class="card-text text-secondary">Thêm, sửa, xóa và xem thông tin chi tiết của các thành viên trong gia đình.</p>
+                    <a asp-controller="People" asp-action="Index" class="btn btn-primary">
+                        <i class="fas fa-arrow-right me-2"></i> Truy cập
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        @* Quan hệ Gia đình *@
+        <div class="col-md-6 col-lg-3 mb-4">
+            <div class="card h-100 text-center">
+                <div class="card-body">
+                    <i class="fas fa-heart fa-3x text-danger mb-3"></i>
+                    <h5 class="card-title">Quan hệ Gia đình</h5>
+                    <p class="card-text text-secondary">Quản lý các mối quan hệ huyết thống và hôn nhân trong gia đình.</p>
+                    <a asp-controller="Relationships" asp-action="Index" class="btn btn-primary">
+                        <i class="fas fa-arrow-right me-2"></i> Truy cập
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        @* Cây Gia Phả *@
+        <div class="col-md-6 col-lg-3 mb-4">
+            <div class="card h-100 text-center">
+                <div class="card-body">
+                    <i class="fas fa-sitemap fa-3x text-success mb-3"></i>
+                    <h5 class="card-title">Cây Gia phả</h5>
+                    <p class="card-text text-secondary">Xem và điều hướng cây gia phả trực quan của toàn bộ gia đình.</p>
+                    <a asp-controller="Tree" asp-action="Index" class="btn btn-primary">
+                        <i class="fas fa-arrow-right me-2"></i> Truy cập
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        @* Sự kiện *@
+        <div class="col-md-6 col-lg-3 mb-4">
+            <div class="card h-100 text-center">
+                <div class="card-body">
+                    <i class="fas fa-calendar-alt fa-3x text-warning mb-3"></i>
+                    <h5 class="card-title">Sự kiện</h5>
+                    <p class="card-text text-secondary">Quản lý các sự kiện quan trọng và kỷ niệm của gia đình.</p>
+                    <a asp-controller="Events" asp-action="Index" class="btn btn-primary">
+                        <i class="fas fa-arrow-right me-2"></i> Truy cập
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- System Info -->
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="mb-0"><i class="fas fa-info-circle me-2"></i> Thông tin hệ thống</h4>
+                </div>
+                <div class="card-body">
+                    <div class="row text-center">
+                        <div class="col-md-4">
+                            <h3 class="text-primary">@ViewBag.TotalPeople</h3>
+                            <p class="text-secondary">Tổng số thành viên</p>
+                        </div>
+                        <div class="col-md-4">
+                            <h3 class="text-success">@ViewBag.TotalFamilies</h3>
+                            <p class="text-secondary">Tổng số gia đình</p>
+                        </div>
+                        <div class="col-md-4">
+                            <h3 class="text-warning">@ViewBag.TotalEvents</h3>
+                            <p class="text-secondary">Tổng số sự kiện</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @if (peopleList.Count > 0)
+    {
+        <script src="https://d3js.org/d3.v7.min.js"></script>
+        <script>
+            const data = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(
+                peopleList.Select(p => new {
+                    id = p.PersonalID,
+                    name = p.Name,
+                    gender = p.Gender,
+                    birthday = p.Birthday?.ToString("yyyy-MM-dd"),
+                    deathDate = p.DeathDate?.ToString("yyyy-MM-dd"),
+                    birthPlace = p.BirthPlace,
+                    generation = p.Generation,
+                    photoUrl = p.PhotoUrl,
+                    pids = p.ChildParents.Select(cp => cp.ParentID).ToArray(),
+                    cids = p.ParentChildren.Select(pc => pc.ChildID).ToArray(),
+                    spouses = p.Marriages1.Select(m => m.Spouse2ID)
+                              .Concat(p.Marriages2.Select(m => m.Spouse1ID))
+                              .Distinct().ToArray()
+                })
+            ));
+            console.log('Data:', data);
+
+            if (data.length > 0) {
+                const width = 1200, height = 600;
+                const svg = d3.select("#tree-container")
+                    .append("svg")
+                    .attr("width", width)
+                    .attr("height", height)
+                    .style("background-color", "#ffffff")
+                    .style("border-radius", "8px");
+
+                const treeLayout = d3.tree().size([width - 200, height - 200]).nodeSize([120, 180]);
+
+                const roots = data.filter(p => p.pids.length === 0);
+                if (!roots.length) roots.push(data[0]);
+
+                function buildTreeNode(person, allData) {
+                    const children = allData.filter(p => p.pids.includes(person.id));
+                    const spouseObj = allData.find(p => person.spouses.includes(p.id));
+                    return {
+                        name: person.name,
+                        id: person.id,
+                        gender: person.gender,
+                        birthday: person.birthday,
+                        spouse: spouseObj?.name,
+                        children: children.map(c => buildTreeNode(c, allData))
+                    };
+                }
+
+                const root = d3.hierarchy({
+                    name: "Gia Phả",
+                    children: roots.map(p => buildTreeNode(p, data))
+                });
+
+                treeLayout(root);
+
+                // Draw links
+                svg.append("g").selectAll("path")
+                    .data(root.links())
+                    .enter()
+                    .append("path")
+                    .attr("d", d => {
+                        const sx = d.source.x, sy = d.source.y, tx = d.target.x, ty = d.target.y;
+                        const midY = (sy + ty) / 2;
+                        return `M ${sx} ${sy} C ${sx} ${midY}, ${tx} ${midY}, ${tx} ${ty}`;
+                    })
+                    .attr("fill", "none")
+                    .attr("stroke", "#bdc3c7")
+                    .attr("stroke-width", 3)
+                    .attr("stroke-linecap", "round");
+
+                // Draw nodes
+                const nodes = svg.append("g")
+                    .selectAll("g")
+                    .data(root.descendants())
+                    .enter()
+                    .append("g")
+                    .attr("transform", d => `translate(${d.x},${d.y})`);
+
+                const defs = svg.append("defs");
+
+                const maleGradient = defs.append("radialGradient").attr("id", "maleGradient").attr("cx", "30%").attr("cy", "30%");
+                maleGradient.append("stop").attr("offset", "0%").attr("stop-color", "#5dade2");
+                maleGradient.append("stop").attr("offset", "100%").attr("stop-color", "#3498db");
+
+                const femaleGradient = defs.append("radialGradient").attr("id", "femaleGradient").attr("cx", "30%").attr("cy", "30%");
+                femaleGradient.append("stop").attr("offset", "0%").attr("stop-color", "#ec7063");
+                femaleGradient.append("stop").attr("offset", "100%").attr("stop-color", "#e74c3c");
+
+                const filter = defs.append("filter").attr("id", "dropshadow").attr("x", "-20%").attr("y", "-20%").attr("width", "140%").attr("height", "140%");
+                filter.append("feGaussianBlur").attr("in", "SourceAlpha").attr("stdDeviation", "3");
+                filter.append("feOffset").attr("dx", "2").attr("dy", "2").attr("result", "offset");
+                filter.append("feFlood").attr("flood-color", "rgba(0,0,0,0.3)").attr("result", "flood");
+                filter.append("feComposite").attr("in", "flood").attr("in2", "offset").attr("operator", "in").attr("result", "shadow");
+                const feMerge = filter.append("feMerge");
+                feMerge.append("feMergeNode").attr("in", "shadow");
+                feMerge.append("feMergeNode").attr("in", "SourceGraphic");
+
+                nodes.append("circle")
+                    .attr("r", 35)
+                    .attr("fill", d => d.data.gender === "Nam" ? "url(#maleGradient)" : d.data.gender === "Nữ" ? "url(#femaleGradient)" : "#95a5a6")
+                    .attr("stroke", "#34495e")
+                    .attr("stroke-width", 3)
+                    .attr("filter", "url(#dropshadow)");
+
+                nodes.append("text").attr("dy", -45).attr("text-anchor", "middle")
+                    .text(d => d.data.name)
+                    .style("font-size", "14px").style("font-weight", "600").style("fill", "#2c3e50");
+
+                nodes.filter(d => d.data.spouse)
+                    .append("text").attr("dy", -28).attr("text-anchor", "middle")
+                    .text(d => d.data.gender === "Nam" ? "Vợ: " + d.data.spouse : "Chồng: " + d.data.spouse)
+                    .style("font-size", "11px").style("fill", "#7f8c8d");
+
+                nodes.append("text").attr("dy", -10).attr("text-anchor", "middle")
+                    .text(d => d.data.birthday ? new Date(d.data.birthday).getFullYear() : "")
+                    .style("font-size", "11px").style("fill", "#95a5a6");
+            }
+        </script>
+    }
+}

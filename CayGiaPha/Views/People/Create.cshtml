@@ -1,0 +1,204 @@
+@model CayGiaPha.Models.People
+
+@{
+    ViewData["Title"] = "Thêm Thành viên Mới";
+}
+
+<div class="fade-in">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="mb-0">
+                <i class="fas fa-user-plus me-2 text-primary"></i>
+                Thêm Thành viên Mới
+            </h2>
+            <p class="text-secondary mt-1">Thêm thông tin thành viên mới vào cây gia phả</p>
+        </div>
+        <a asp-action="Index" class="btn btn-secondary">
+            <i class="fas fa-arrow-left me-2"></i>
+            Quay lại danh sách
+        </a>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="fas fa-edit me-2"></i>
+                        Thông tin thành viên
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <form asp-action="Create" enctype="multipart/form-data">
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label asp-for="FamilyID" class="form-label fw-bold">
+                                        <i class="fas fa-home me-2"></i>
+                                        Gia đình *
+                                    </label>
+                                    <select asp-for="FamilyID" class="form-control" asp-items="ViewBag.FamilyID">
+                                        <option value="">-- Chọn gia đình --</option>
+                                    </select>
+                                    <span asp-validation-for="FamilyID" class="text-danger small"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label asp-for="Name" class="form-label fw-bold">
+                                        <i class="fas fa-user me-2"></i>
+                                        Họ và tên *
+                                    </label>
+                                    <input asp-for="Name" class="form-control" placeholder="Nhập họ và tên đầy đủ" />
+                                    <span asp-validation-for="Name" class="text-danger small"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label asp-for="Gender" class="form-label fw-bold">
+                                        <i class="fas fa-venus-mars me-2"></i>
+                                        Giới tính *
+                                    </label>
+                                    <select asp-for="Gender" class="form-control">
+                                        <option value="">-- Chọn giới tính --</option>
+                                        <option value="Nam">Nam</option>
+                                        <option value="Nữ">Nữ</option>
+                                    </select>
+                                    <span asp-validation-for="Gender" class="text-danger small"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label asp-for="Generation" class="form-label fw-bold">
+                                        <i class="fas fa-layer-group me-2"></i>
+                                        Thế hệ
+                                    </label>
+                                    <input asp-for="Generation" class="form-control" type="number" placeholder="Ví dụ: 1, 2, 3..." />
+                                    <span asp-validation-for="Generation" class="text-danger small"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label asp-for="Birthday" class="form-label fw-bold">
+                                        <i class="fas fa-birthday-cake me-2"></i>
+                                        Ngày sinh
+                                    </label>
+                                    <input asp-for="Birthday" class="form-control" type="date" />
+                                    <span asp-validation-for="Birthday" class="text-danger small"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label asp-for="DeathDate" class="form-label fw-bold">
+                                        <i class="fas fa-cross me-2"></i>
+                                        Ngày mất
+                                    </label>
+                                    <input asp-for="DeathDate" class="form-control" type="date" />
+                                    <span asp-validation-for="DeathDate" class="text-danger small"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label asp-for="BirthPlace" class="form-label fw-bold">
+                                <i class="fas fa-map-marker-alt me-2"></i>
+                                Nơi sinh
+                            </label>
+                            <input asp-for="BirthPlace" class="form-control" placeholder="Nhập nơi sinh" />
+                            <span asp-validation-for="BirthPlace" class="text-danger small"></span>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label asp-for="Email" class="form-label fw-bold">
+                                        <i class="fas fa-envelope me-2"></i>
+                                        Email
+                                    </label>
+                                    <input asp-for="Email" class="form-control" type="email" placeholder="example@email.com" />
+                                    <span asp-validation-for="Email" class="text-danger small"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label asp-for="Phone" class="form-label fw-bold">
+                                        <i class="fas fa-phone me-2"></i>
+                                        Số điện thoại
+                                    </label>
+                                    <input asp-for="Phone" class="form-control" placeholder="0123 456 789" />
+                                    <span asp-validation-for="Phone" class="text-danger small"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group mb-4">
+                            <label asp-for="PhotoUrl" class="form-label fw-bold">
+                                <i class="fas fa-camera me-2"></i>
+                                Ảnh đại diện
+                            </label>
+                            <input asp-for="PhotoUrl" class="form-control" type="file" accept="image/*" />
+                            <div class="form-text">
+                                Chọn ảnh đại diện cho thành viên (định dạng: JPG, PNG, GIF)
+                            </div>
+                            <span asp-validation-for="PhotoUrl" class="text-danger small"></span>
+                        </div>
+
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save me-2"></i>
+                                Lưu thành viên
+                            </button>
+                            <a asp-action="Index" class="btn btn-secondary">
+                                <i class="fas fa-times me-2"></i>
+                                Hủy bỏ
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="card">
+                <div class="card-header">
+                    <h6 class="mb-0">
+                        <i class="fas fa-info-circle me-2"></i>
+                        Hướng dẫn
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <ul class="list-unstyled small">
+                        <li class="mb-2">
+                            <i class="fas fa-check text-success me-2"></i>
+                            Các trường có dấu (*) là bắt buộc
+                        </li>
+                        <li class="mb-2">
+                            <i class="fas fa-check text-success me-2"></i>
+                            Ngày sinh và ngày mất theo định dạng DD/MM/YYYY
+                        </li>
+                        <li class="mb-2">
+                            <i class="fas fa-check text-success me-2"></i>
+                            Ảnh đại diện nên có kích thước vuông
+                        </li>
+                        <li class="mb-2">
+                            <i class="fas fa-check text-success me-2"></i>
+                            Thông tin có thể cập nhật sau khi tạo
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

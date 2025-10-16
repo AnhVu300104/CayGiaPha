@@ -1,0 +1,397 @@
+/* Modern Genealogy Tree Application Styles */
+
+:root {
+  --primary-color: #4a90e2;
+  --secondary-color: #f5f7fa;
+  --accent-color: #50c878;
+  --text-color: #333;
+  --light-text: #666;
+  --border-color: #e1e5e9;
+  --shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  --sidebar-width: 250px;
+  --header-height: 60px;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 14px;
+  scroll-behavior: smooth;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: var(--secondary-color);
+  color: var(--text-color);
+  line-height: 1.6;
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+}
+
+/* Header Styles */
+.navbar {
+  background: linear-gradient(135deg, var(--primary-color), #357abd) !important;
+  box-shadow: var(--shadow);
+  border: none;
+  height: var(--header-height);
+}
+
+.navbar-brand {
+  font-weight: bold;
+  font-size: 1.5rem;
+  color: white !important;
+}
+
+.navbar-nav .nav-link {
+  color: rgba(255, 255, 255, 0.9) !important;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.navbar-nav .nav-link:hover {
+  color: white !important;
+}
+
+/* Layout */
+.app-container {
+  display: flex;
+  min-height: calc(100vh - var(--header-height));
+}
+
+.sidebar {
+  width: var(--sidebar-width);
+  background: white;
+  box-shadow: var(--shadow);
+  padding: 20px 0;
+  position: fixed;
+  height: calc(100vh - var(--header-height));
+  overflow-y: auto;
+  z-index: 100;
+}
+
+.sidebar .nav {
+  padding: 0;
+}
+
+.sidebar .nav-item {
+  margin: 5px 0;
+}
+
+.sidebar .nav-link {
+  color: var(--text-color);
+  padding: 12px 25px;
+  display: block;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  border-left: 4px solid transparent;
+}
+
+.sidebar .nav-link:hover,
+.sidebar .nav-link.active {
+  background-color: var(--secondary-color);
+  color: var(--primary-color);
+  border-left-color: var(--primary-color);
+  text-decoration: none;
+}
+
+.sidebar .nav-link i {
+  margin-right: 10px;
+  width: 20px;
+  text-align: center;
+}
+
+.main-content {
+  flex: 1;
+  margin-left: var(--sidebar-width);
+  padding: 30px;
+  background-color: var(--secondary-color);
+  min-height: calc(100vh - var(--header-height));
+}
+
+/* Cards */
+.card {
+  background: white;
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+  border: none;
+  margin-bottom: 20px;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+}
+
+.card-header {
+  background: linear-gradient(135deg, var(--primary-color), #357abd);
+  color: white;
+  border: none;
+  padding: 20px;
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+.card-body {
+  padding: 25px;
+}
+
+/* Buttons */
+.btn {
+  border-radius: 8px;
+  font-weight: 500;
+  padding: 10px 20px;
+  transition: all 0.3s ease;
+  border: none;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--primary-color), #357abd);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: linear-gradient(135deg, #357abd, var(--primary-color));
+  transform: translateY(-1px);
+  box-shadow: 0 4px 15px rgba(74, 144, 226, 0.4);
+}
+
+.btn-success {
+  background: linear-gradient(135deg, var(--accent-color), #45a049);
+  color: white;
+}
+
+.btn-success:hover {
+  background: linear-gradient(135deg, #45a049, var(--accent-color));
+  transform: translateY(-1px);
+  box-shadow: 0 4px 15px rgba(80, 200, 120, 0.4);
+}
+
+.btn-danger {
+  background: linear-gradient(135deg, #e74c3c, #c0392b);
+  color: white;
+}
+
+.btn-danger:hover {
+  background: linear-gradient(135deg, #c0392b, #e74c3c);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 15px rgba(231, 76, 60, 0.4);
+}
+
+.btn-secondary {
+  background: #6c757d;
+  color: white;
+}
+
+.btn-secondary:hover {
+  background: #5a6268;
+  transform: translateY(-1px);
+}
+
+/* Forms */
+.form-control {
+  border: 2px solid var(--border-color);
+  border-radius: 8px;
+  padding: 12px 15px;
+  font-size: 1rem;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form-control:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 0.2rem rgba(74, 144, 226, 0.25);
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-label {
+  font-weight: 600;
+  color: var(--text-color);
+  margin-bottom: 8px;
+}
+
+/* Tables */
+.table {
+  background: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: var(--shadow);
+}
+
+.table thead th {
+  background: linear-gradient(135deg, var(--primary-color), #357abd);
+  color: white;
+  border: none;
+  font-weight: 600;
+  padding: 15px;
+}
+
+.table tbody tr {
+  transition: background-color 0.3s ease;
+}
+
+.table tbody tr:hover {
+  background-color: var(--secondary-color);
+}
+
+.table td {
+  padding: 15px;
+  border-bottom: 1px solid var(--border-color);
+  vertical-align: middle;
+}
+
+/* Alerts */
+.alert {
+  border-radius: 8px;
+  border: none;
+  padding: 15px 20px;
+  margin-bottom: 20px;
+}
+
+.alert-success {
+  background: linear-gradient(135deg, #d4edda, #c3e6cb);
+  color: #155724;
+}
+
+.alert-danger {
+  background: linear-gradient(135deg, #f8d7da, #f5c6cb);
+  color: #721c24;
+}
+
+.alert-info {
+  background: linear-gradient(135deg, #d1ecf1, #bee5eb);
+  color: #0c5460;
+}
+
+/* Genealogy Tree Styles */
+.tree-container {
+  background: white;
+  border-radius: 12px;
+  padding: 30px;
+  box-shadow: var(--shadow);
+  margin: 20px 0;
+}
+
+.tree-node {
+  background: var(--primary-color);
+  color: white;
+  border-radius: 50%;
+  width: 80px;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  box-shadow: var(--shadow);
+  transition: transform 0.3s ease;
+}
+
+.tree-node:hover {
+  transform: scale(1.1);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .sidebar {
+    width: 100%;
+    height: auto;
+    position: relative;
+  }
+
+  .main-content {
+    margin-left: 0;
+    padding: 20px;
+  }
+
+  .navbar-brand {
+    font-size: 1.2rem;
+  }
+
+  .card-body {
+    padding: 20px;
+  }
+
+  .table-responsive {
+    font-size: 0.9rem;
+  }
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in {
+  animation: fadeIn 0.5s ease-out;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--secondary-color);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--primary-color);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #357abd;
+}
+
+/* Footer */
+.footer {
+  background: white;
+  border-top: 1px solid var(--border-color);
+  padding: 20px 0;
+  text-align: center;
+  color: var(--light-text);
+}
+
+/* Loading Spinner */
+.spinner {
+  border: 4px solid var(--border-color);
+  border-top: 4px solid var(--primary-color);
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+  margin: 20px auto;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Utility Classes */
+.text-primary { color: var(--primary-color) !important; }
+.text-secondary { color: var(--light-text) !important; }
+.bg-light { background-color: var(--secondary-color) !important; }
+.shadow-sm { box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1) !important; }
+.rounded { border-radius: 8px !important; }

@@ -1,0 +1,120 @@
+﻿﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - CayGiaPha</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/custom.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/CayGiaPha.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    @if (User.Identity.IsAuthenticated)
+    {
+        <header>
+            <nav class="navbar navbar-expand-lg navbar-dark">
+                <div class="container-fluid">
+                    <a class="navbar-brand" href="#">
+                        <i class="fas fa-tree me-2"></i>
+                        Cây Gia Phả
+                    </a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarNav">
+                        <ul class="navbar-nav ms-auto">
+                            <li class="nav-item">
+                                <span class="nav-link">
+                                    <i class="fas fa-user me-1"></i>
+                                    Xin chào, @User.Identity.Name
+                                </span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        </header>
+
+        <div class="app-container">
+            <!-- Sidebar -->
+            <nav class="sidebar">
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link" asp-controller="Home" asp-action="Index">
+                            <i class="fas fa-home"></i>
+                            Trang chủ
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-controller="People" asp-action="Index">
+                            <i class="fas fa-users"></i>
+                            Quản lý Thành viên
+                        </a>
+                    </li>
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Users" asp-action="Index">
+                                <i class="fas fa-user-cog"></i>
+                                Quản lý Tài khoản
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Relationships" asp-action="Index">
+                                <i class="fas fa-heart"></i>
+                                Quan hệ Gia đình
+                            </a>
+                        </li>
+                    }
+                    <li class="nav-item">
+                        <a class="nav-link" asp-controller="Tree" asp-action="Index">
+                            <i class="fas fa-sitemap"></i>
+                            Cây Gia phả
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-controller="Events" asp-action="Index">
+                            <i class="fas fa-calendar-alt"></i>
+                            Sự kiện
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-controller="Account" asp-action="ChangePassword">
+                            <i class="fas fa-key"></i>
+                            Đổi mật khẩu
+                        </a>
+                    </li>
+                    <li class="nav-item mt-3">
+                        <form asp-controller="Account" asp-action="Logout" method="post" class="w-100">
+                            <button type="submit" class="btn btn-outline-danger w-100">
+                                <i class="fas fa-sign-out-alt me-2"></i>
+                                Đăng xuất
+                            </button>
+                        </form>
+                    </li>
+                </ul>
+            </nav>
+
+            <!-- Main content -->
+            <main class="main-content">
+                @RenderBody()
+            </main>
+        </div>
+    }
+    else
+    {
+        <div class="container-fluid">
+            <main role="main" class="pb-3">
+                @RenderBody()
+            </main>
+        </div>
+    }
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

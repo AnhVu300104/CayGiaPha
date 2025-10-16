@@ -1,0 +1,28 @@
+@{
+    ViewData["Title"] = "Quan hệ Gia đình";
+}
+
+<h1>Quản lý Quan hệ Gia đình</h1>
+
+<p>Chọn loại quan hệ để thiết lập:</p>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Quan hệ Cha - Con</h5>
+                <p class="card-text">Thiết lập mối quan hệ giữa cha/mẹ và con.</p>
+                <a href="@Url.Action("CreateParentChild", "Relationships")" class="btn btn-primary">Thiết lập</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Quan hệ Hôn nhân</h5>
+                <p class="card-text">Thiết lập mối quan hệ hôn nhân giữa hai người.</p>
+                <a href="@Url.Action("CreateMarriage", "Relationships")" class="btn btn-primary">Thiết lập</a>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,65 @@
+@model IEnumerable<CayGiaPha.Models.Events>
+
+@{
+    ViewData["Title"] = "Danh sách Sự kiện";
+}
+
+<h1>Danh sách Sự kiện</h1>
+
+<p>
+    @if (User.IsInRole("Admin"))
+    {
+        <a asp-action="Create" class="btn btn-primary">Tạo sự kiện mới</a>
+    }
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Tên sự kiện
+            </th>
+            <th>
+                Loại sự kiện
+            </th>
+            <th>
+                Ngày tổ chức
+            </th>
+            <th>
+                Địa điểm
+            </th>
+            <th>
+                Người tổ chức
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Title)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EventType)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EventDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Location)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Organizer.Name)
+            </td>
+            <td>
+                <a asp-action="Details" asp-route-id="@item.EventID" class="btn btn-info btn-sm">Chi tiết</a>
+                @if (User.IsInRole("Admin"))
+                {
+                    <a asp-action="Edit" asp-route-id="@item.EventID" class="btn btn-warning btn-sm">Sửa</a>
+                    <a asp-action="Delete" asp-route-id="@item.EventID" class="btn btn-danger btn-sm">Xóa</a>
+                }
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

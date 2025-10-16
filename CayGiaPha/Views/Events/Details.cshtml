@@ -1,0 +1,93 @@
+@model CayGiaPha.Models.Events
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>Events</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Title)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Title)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.EventType)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.EventType)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.EventDate)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.EventDate)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Location)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Location)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.ImageURL)
+        </dt>
+        <dd class = "col-sm-10">
+            @if (!string.IsNullOrEmpty(Model.ImageURL))
+            {
+                <img src="@Model.ImageURL" alt="Event Image" class="img-thumbnail" style="max-width: 200px;" />
+            }
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Organizer.Name)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Organizer.Name)
+        </dd>
+    </dl>
+</div>
+
+@if (Model.Registrations != null && Model.Registrations.Any())
+{
+    <h4>Registrations</h4>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Registered At</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var registration in Model.Registrations)
+            {
+                <tr>
+                    <td>@registration.Person.Name</td>
+                    <td>@registration.RegisteredAt</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@if (User.Identity.IsAuthenticated)
+{
+    <form asp-action="Register" method="post">
+        <input type="hidden" name="eventId" value="@Model.EventID" />
+        <button type="submit" class="btn btn-success">Register for Event</button>
+    </form>
+}
+
+<div>
+    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+</div>
