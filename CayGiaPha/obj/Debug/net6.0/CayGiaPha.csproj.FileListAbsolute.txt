@@ -67,3 +67,4 @@ C:\Users\HP\Downloads\CayGiaPha\CayGiaPha\obj\Debug\net6.0\CayGiaPha.pdb
 C:\Users\HP\Downloads\CayGiaPha\CayGiaPha\obj\Debug\net6.0\CayGiaPha.genruntimeconfig.cache
 C:\Users\HP\Downloads\CayGiaPha\CayGiaPha\obj\Debug\net6.0\ref\CayGiaPha.dll
 C:\Users\HP\Downloads\CayGiaPha\CayGiaPha\obj\Debug\net6.0\staticwebassets.upToDateCheck.txt
+C:\Users\HP\Downloads\CayGiaPha\CayGiaPha\obj\Debug\net6.0\CayGiaPha.sourcelink.json

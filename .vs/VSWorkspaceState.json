@@ -1,6 +1,13 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\CayGiaPha",
+    "\\CayGiaPha\\Views",
+    "\\CayGiaPha\\Views\\Home",
+    "\\CayGiaPha\\wwwroot",
+    "\\CayGiaPha\\wwwroot\\lib",
+    "\\CayGiaPha\\wwwroot\\lib\\jquery-validation",
+    "\\CayGiaPha\\wwwroot\\lib\\jquery-validation\\dist"
   ],
   "SelectedNode": "\\CayGiaPha.sln",
   "PreviewInSolutionExplorer": false
