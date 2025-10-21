@@ -6,7 +6,7 @@ git clone: https://github.com/AnhVu300104/CayGiaPha
 Hoặc tải ZIP từ GitHub → giải nén.
 Bước 3: Chuẩn bị database
 1.    Mở SQL Server 2014
-2.    Tạo database mới, ví dụ: CVDB.
+2.    Tạo database mới, ví dụ: FamilyTreeDb.
 3.    Mở file database/FamilyTreeDb.sql → nhấn Execute để tạo bảng và dữ liệu mẫu.
 Bước 4: Cấu hình kết nối database
 - Tiếp theo mở Visual Studio 2022 -> Open a local folder và chọn file project vừa clone hoặc giải nén để mở dự án
